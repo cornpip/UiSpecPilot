@@ -1,10 +1,6 @@
-# 08. Semantic Quality Gate
+# 04. Semantic Quality Gate
 
-이 문서는 생성되었거나 수정된 `ui_spec`에 대해
-source spec 관점에서 어떤 semantic을 점검하고,
-부족한 semantic을 어떻게 보강할지 정의한다.
-
-이 문서는 현재 `ui_spec` source contract 중 "semantic 최소 계약과 self-review 기준"을 담당한다.
+이 04번 가이드는 생성되었거나 수정된 `ui_spec`에 대해 source semantic의 최소 계약, self-review 기준, semantic patch 기준을 정의한다.
 즉 source-of-truth로서 필요한 semantic이 무엇인지와, 무엇이 아직 부족한지를 이 문서 기준으로 판단한다.
 
 ## Goal
@@ -197,6 +193,21 @@ semantic 보강은 아래 원칙으로 수행한다.
 - 상단 summary/hero card가 하단 옵션 선택 결과를 반영하는 자리라면, 그 관계를 raw variant 메타나 prose 설명에만 맡기지 말고 현재 선택 슬롯이라는 semantic/state 의도를 함께 남긴다.
 - 이때 current-selection slot 관계 자체는 `semantic/state`에 남기고, guest/member처럼 variant별 visual 차이가 실제 구현에 필요하면 그 차이는 `componentVariants`로 구조화한다.
 - 반대로 summary card가 고정 안내 카드라면 선택 옵션과의 상태 연동을 암시하는 표현을 피한다.
+
+### Settings-style Rows
+
+- 설정 화면의 row는 비슷한 시각 패턴만 보고 같은 semantic으로 처리하지 않는다.
+- 현재값 변경 없이 즉시 켜고 끄는 row는 toggle intent를 우선 검토한다.
+- 현재값이 보이고 다른 선택지 패널이나 화면을 여는 row는 selection-change intent를 우선 검토한다.
+- 상세 화면이나 하위 설정 화면으로 이동하는 row는 navigation intent를 우선 검토한다.
+- 로그아웃, 초기화, 삭제처럼 위험도가 높은 row는 generic navigation row와 구분되는 action intent를 남긴다.
+- 현재값이 중요한 row라면 visible text만으로 의미를 넘기지 말고, source semantic에서 어떤 종류의 변경 affordance인지 해석 가능해야 한다.
+
+### Drawer / Side Panel Navigation Items
+
+- 보조 패널이나 drawer 안의 메뉴 항목은 단순 텍스트 목록처럼 보여도 실제로는 navigation 또는 selection intent를 가질 수 있으므로, 시각 패턴만으로 처리하지 않는다.
+- 현재 위치를 나타내는 활성 메뉴 항목이 있다면, 단순 강조 스타일만 남기지 말고 현재 선택 또는 현재 화면 대응 관계를 semantic/state로 해석 가능한지 검토한다.
+- 보조 패널의 항목도 본문 list row와 동일하게 뭉개지지 않게, 실제 행동이 화면 이동인지 로컬 패널 상태 변경인지 구분한다.
 
 ### Variant Visual Source-of-Truth
 

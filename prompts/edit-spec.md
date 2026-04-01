@@ -1,7 +1,7 @@
 Paste this into your agent session:
 
 Use the guides under `ui_spec/guides/` in this workspace as the source-of-truth contract set for `ui_spec` authoring and editing.
-Treat `ui_spec/guides/01-schema-rules.md`, `ui_spec/guides/08-semantic-quality-gate.md`, and `ui_spec/guides/09-semantic-to-ir-check.md` as the primary contract documents.
+Treat `ui_spec/guides/01-schema-rules.md`, `ui_spec/guides/04-semantic-quality-gate.md`, and `ui_spec/guides/05-semantic-to-ir-check.md` as the primary contract documents.
 
 Task:
 Target `ui_spec` file path:
@@ -13,8 +13,8 @@ Requested changes:
 Before editing:
 - Read `ui_spec/guides/01-schema-rules.md`
 - Read any linked guide files needed for schema, workflow, and checklist compliance
-- Read `ui_spec/guides/08-semantic-quality-gate.md` before finalizing
-- Read `ui_spec/guides/09-semantic-to-ir-check.md` before finalizing if you need to report semantic-to-IR check results
+- Read `ui_spec/guides/04-semantic-quality-gate.md` before finalizing
+- Read `ui_spec/guides/05-semantic-to-ir-check.md` before finalizing if you need to report semantic-to-IR check results
 
 Rules:
 - Work only on the requested `ui_spec` file unless a closely related change is required

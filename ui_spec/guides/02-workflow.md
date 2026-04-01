@@ -1,6 +1,7 @@
 # 02. Workflow
 
-에이전트가 `ui_spec`을 다룰 때의 표준 작업 순서입니다.
+이 02번 가이드는 `ui_spec` 생성, 수정, sync, round-trip 과정의 표준 작업 순서와 운영 절차를 정의합니다.
+허용 필드와 shape는 `01-schema-rules.md`, 저장 전후 검수는 `03-quality-checklist.md`를 따릅니다.
 
 ## 생성/수정 순서
 
@@ -13,13 +14,19 @@
 7. 플러그인에서 `Set Active File` 확인
 8. `Start Realtime Sync` 상태에서 결과 확인
 
-## 실시간 sync 기준
+## 실시간 Sync 기준
 
 - sync 시작 전: 반드시 `Set Active File`
 - sync 중: 파일 저장만으로 자동 반영
 - 리로드 발생 시: 이전 `autoSync` 상태면 재연결 시도
 - Figma에서 `Extract to ui_spec`로 round-trip 저장할 때 semantic 보존은 기존 source의 `meta.figmaNodeId` 또는 렌더 시 심긴 `semantic.id` 기반 merge에 의존한다.
 - hand-authored source를 처음 렌더한 직후에는 round-trip 저장 전후로 root와 주요 interactive node의 `semantic` 유지 여부를 다시 확인한다.
+
+## Round-trip Safety
+
+- Figma에서 나온 결과가 렌더상 맞아 보여도, semantic이 빠졌다면 source-of-truth로 바로 확정하지 않는다.
+- `Extract to ui_spec` 이후에는 root semantic, 주요 interactive node semantic, `meta.figmaNodeId` merge 결과를 함께 다시 확인한다.
+- round-trip 결과가 visual만 보존하고 semantic을 약화시켰다면, visual 편집 성공으로 처리하지 말고 semantic patch가 필요한 상태로 본다.
 
 ## 안전한 변경 전략
 

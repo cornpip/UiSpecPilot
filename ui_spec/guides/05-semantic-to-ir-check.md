@@ -1,13 +1,9 @@
-# 09. Semantic To IR Check
+# 05. Semantic To IR Check
 
-이 문서는 `ui_spec` source semantic review와 별도로,
-source semantic이 IR 변환에 들어갈 때 안정적으로 정규화될 수 있는지 점검하는 기준을 정의한다.
-
-이 문서는 현재 `ui_spec` source contract 중 "공통 IR baseline 기준 정규화 점검"을 담당한다.
+이 05번 가이드는 source semantic 품질과 IR 정규화 가능성의 경계를 구분하고, semantic-to-IR 점검 기준을 정의한다.
 즉 semantic 자체를 새로 정의하지 않고, 이미 작성된 source semantic이 downstream 변환 입력으로 충분한지만 판단한다.
 
-이 문서는 semantic source-of-truth를 새로 정의하지 않는다.
-semantic 자체의 품질 기준은 `08-semantic-quality-gate.md`를 따른다.
+semantic 자체의 품질 기준은 `04-semantic-quality-gate.md`를 따른다.
 semantic-to-IR check의 공통 기준 문서는 `compilers/UI_SPEC_TO_IR_BASELINE.md`다.
 
 ## Goal
@@ -54,6 +50,20 @@ semantic-to-IR check의 공통 기준 문서는 `compilers/UI_SPEC_TO_IR_BASELIN
 - semantic source는 충분하지만 IR 정규화 단계에서만 한계가 남아 있으면, semantic 불충분으로 오판하지 않는다.
 - 반대로 IR 정규화가 통과하더라도 source semantic이 빈약하면 semantic review 통과로 과장하지 않는다.
 - IR 정규화가 fallback inference에 의존하면 그 사실을 명시적으로 보고한다.
+
+## Issue Classification Examples
+
+| case | classify as | reason |
+| --- | --- | --- |
+| tappable node에 `semantic.id`가 없음 | semantic issue | source에서 stable reference가 없음 |
+| `semantic.type`만 있고 `interaction.onTap.type`이 없음 | semantic issue | 구조화 가능한 trigger intent가 source에 없음 |
+| screen root인데 `semantic.route`가 없음 | semantic issue | screen entrypoint 의미가 source에서 불충분 |
+| selection card와 detail row가 모두 generic `button`으로만 기록됨 | semantic issue | source-level disambiguation 부족 |
+| source semantic은 충분하지만 target compiler가 특정 subtype을 아직 좁게만 매핑함 | IR normalization issue | source보다 downstream 해석 제약 문제 |
+| `navigate.to`와 `navigation.mode`는 있으나 target IR exporter가 특정 mode를 누락함 | IR normalization issue | source는 충분하고 exporter가 손실을 냄 |
+| route/submit contract 자체가 아직 제품 설계상 미정이고 source가 이를 `notes`로 명시함 | unresolved source dependency | semantic이 비어 있는 것이 아니라 upstream product decision이 미정 |
+| visible text 때문에 exporter가 `selected/default`를 과추론함 | IR normalization issue 또는 exporter issue | source가 중립 표현을 썼는데도 정규화가 과추론하면 downstream 문제다 |
+| visible text와 `label/notes` 자체가 상태처럼 읽히게 작성됨 | semantic issue | source 표현이 과추론을 유발함 |
 
 ## Prompt Guidance
 

@@ -14,8 +14,8 @@
 입력 기준:
 
 - `ui_spec/guides/01-schema-rules.md`
-- `ui_spec/guides/08-semantic-quality-gate.md`
-- `ui_spec/guides/09-semantic-to-ir-check.md`
+- `ui_spec/guides/04-semantic-quality-gate.md`
+- `ui_spec/guides/05-semantic-to-ir-check.md`
 - `compilers/flutter_ir/schema/flutter_ir_v0_1.schema.json`
 - `compilers/flutter_ir/examples/sample_flutter_ir.json`
 

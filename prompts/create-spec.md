@@ -1,7 +1,7 @@
 Paste this into your agent session:
 
 Use the guides under `ui_spec/guides/` in this workspace as the source-of-truth contract set for `ui_spec` authoring and editing.
-Treat `ui_spec/guides/01-schema-rules.md`, `ui_spec/guides/08-semantic-quality-gate.md`, and `ui_spec/guides/09-semantic-to-ir-check.md` as the primary contract documents.
+Treat `ui_spec/guides/01-schema-rules.md`, `ui_spec/guides/04-semantic-quality-gate.md`, and `ui_spec/guides/05-semantic-to-ir-check.md` as the primary contract documents.
 
 Task:
 Requested `ui_spec` creation:
@@ -10,12 +10,15 @@ Requested `ui_spec` creation:
 Before editing:
 - Read `ui_spec/guides/01-schema-rules.md`
 - Read any linked guide files needed for schema, workflow, and checklist compliance
-- Read `ui_spec/guides/08-semantic-quality-gate.md` before finalizing
-- Read `ui_spec/guides/09-semantic-to-ir-check.md` before finalizing if you need to report semantic-to-IR check results
+- Read `ui_spec/guides/04-semantic-quality-gate.md` before finalizing
+- Read `ui_spec/guides/05-semantic-to-ir-check.md` before finalizing if you need to report semantic-to-IR check results
 
 Rules:
 - Create or edit files only under `ui_spec/samples/`
 - Follow the `ui_spec` guide rules before making decisions
+- If the request includes a screenshot, mockup, logo, or local image file as a visual reference, interpret it as a request to author a `ui_spec` that will be rendered in Figma, not as a request to manually draw directly in Figma outside the `ui_spec` workflow
+- When a visual reference cannot be reproduced exactly within supported `ui_spec` node/style constraints, approximate it with supported shapes, text, or SVG structure and report the remaining gaps or assumptions explicitly
+- Prefer reconstructable `TEXT` / `SVG` / basic shape structure over opaque image insertion when the request implies a reusable logo, icon, or UI element, unless the user explicitly asks to keep it as an image asset
 - Do not use existing `ui_spec` layouts as references unless explicitly requested
 - When creating a new file, use the default naming rule from the guide
 - Treat `ui_spec` as a human-editable source spec first, not as a dump for compiler fallback tags

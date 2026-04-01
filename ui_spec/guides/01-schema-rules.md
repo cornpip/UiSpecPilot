@@ -1,9 +1,11 @@
 # 01. Schema Rules
 
-`ui_spec` 생성 시 반드시 지켜야 하는 최소 스키마 규칙입니다.
-작업 시작 전에는 먼저 `ui_spec/guides/AUTHORING_GUIDE.md`를 읽고, 전체 authoring 흐름과 관련 guide 구성을 확인한 뒤 이 문서로 돌아옵니다.
-이 문서는 현재 `ui_spec` source contract 중 "허용 필드와 작성 규칙"을 담당합니다.
-즉 authoring 단계에서 어떤 구조와 표현을 source-of-truth로 허용할지 이 문서가 정합니다.
+이 numbered guides 세트가 이 프로젝트의 `ui_spec` source contract를 정의합니다.
+특히 `01-schema-rules.md`, `04-semantic-quality-gate.md`, `05-semantic-to-ir-check.md`를 계약 기준 세트로 취급합니다.
+
+이 01번 가이드는 `ui_spec` source contract에서 허용 필드, 최소 shape, 작성 금지 패턴을 정의합니다.
+즉 authoring 단계에서 어떤 구조와 표현을 source-of-truth로 허용할지 정합니다.
+작업 순서와 round-trip 운영은 `02-workflow.md`, 최종 저장 전후 점검은 `03-quality-checklist.md`, semantic 품질 기준은 `04-semantic-quality-gate.md`, semantic-to-IR 경계는 `05-semantic-to-ir-check.md`를 따릅니다.
 
 ## 필수 규칙
 
@@ -126,6 +128,109 @@
 - `componentVariants`에 있더라도 앱 의미는 여전히 `semantic`/`state`에 남겨야 한다. 예를 들어 current-selection slot, default, selected 같은 관계를 visual diff만으로 암시하지 않는다.
 - 권장 최소 포함 항목은 `currentVariant`, `variants[*].surface.fills|strokes|effects`, 필요 시 `badge`, `text`, `trailingAction`이다.
 - variant visual 차이를 prose `notes`로 길게 설명하는 대신, 구조화 가능한 항목은 `componentVariants`로 옮기는 것을 우선한다.
+
+## Minimal Semantic Shapes
+
+아래 예시는 새 필드를 발명하기 위한 것이 아니라, 이미 이 가이드 세트에서 반복적으로 요구하는 최소 shape를 고정하기 위한 예시다.
+
+### Screen Root
+
+```json
+{
+  "type": "FRAME",
+  "semantic": {
+    "id": "screen_settings",
+    "role": "screen",
+    "route": "/settings"
+  }
+}
+```
+
+### Component Root
+
+```json
+{
+  "type": "COMPONENT",
+  "semantic": {
+    "id": "component_filter_chip",
+    "role": "component",
+    "component": {
+      "name": "FilterChip"
+    }
+  }
+}
+```
+
+### Interactive Navigation Trigger
+
+```json
+{
+  "type": "FRAME",
+  "semantic": {
+    "id": "row_notifications",
+    "type": "listItem",
+    "interaction": {
+      "onTap": {
+        "type": "navigate",
+        "to": "/settings/notifications"
+      }
+    },
+    "navigation": {
+      "mode": "push"
+    }
+  }
+}
+```
+
+### Interactive Component Trigger
+
+```json
+{
+  "type": "FRAME",
+  "semantic": {
+    "id": "button_open_profile_sheet",
+    "type": "button",
+    "interaction": {
+      "onTap": {
+        "type": "open_component",
+        "targetId": "component_profile_sheet"
+      }
+    },
+    "componentRef": {
+      "id": "component_profile_sheet"
+    }
+  }
+}
+```
+
+### `componentVariants` Skeleton
+
+```json
+{
+  "componentVariants": {
+    "currentVariant": "selected",
+    "variants": [
+      {
+        "id": "selected",
+        "surface": {
+          "fills": ["#EEF3FF"],
+          "strokes": [{ "color": "#5B8DEF", "weight": 1 }]
+        }
+      },
+      {
+        "id": "default",
+        "surface": {
+          "fills": ["#FFFFFF"],
+          "strokes": [{ "color": "#D9DFEA", "weight": 1 }]
+        }
+      }
+    ]
+  }
+}
+```
+
+`state`는 큰 자유 형식 메모처럼 늘리지 말고, 실제 current runtime meaning을 구분하는 최소 정보만 남긴다.
+`semantic`, `interaction`, `navigation`, `componentRef`로 구조화 가능한 의미를 `state` 하나로 뭉개지 않는다.
 
 ## 자동 그룹 예시
 

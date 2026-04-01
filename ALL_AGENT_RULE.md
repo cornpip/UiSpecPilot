@@ -26,12 +26,8 @@
 - `ui_spec/guides/01-schema-rules.md`
 - `ui_spec/guides/02-workflow.md`
 - `ui_spec/guides/03-quality-checklist.md`
-- `ui_spec/guides/04-prompt-templates.md`
-- `ui_spec/guides/05-ui-structure-guidelines.md`
-- `ui_spec/guides/06-settings-screen-patterns.md`
-- `ui_spec/guides/07-app-bar-enddrawer-patterns.md`
-- `ui_spec/guides/08-semantic-quality-gate.md`
-- `ui_spec/guides/09-semantic-to-ir-check.md`
+- `ui_spec/guides/04-semantic-quality-gate.md`
+- `ui_spec/guides/05-semantic-to-ir-check.md`
 
 ### Working Rules
 

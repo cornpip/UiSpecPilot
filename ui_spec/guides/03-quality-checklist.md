@@ -1,6 +1,7 @@
 # 03. Quality Checklist
 
-저장 전/후 체크리스트입니다.
+이 03번 가이드는 `ui_spec` 결과물이 저장 전후에 계약 기준을 만족하는지 최종 검수합니다.
+허용 필드와 최소 shape를 새로 정의하지 않고, `01`, `02`, `04`, `05`에서 정한 기준이 실제 결과물에 반영됐는지만 확인합니다.
 
 ## 저장 전
 
@@ -31,7 +32,7 @@
 
 ## Semantic Gate
 
-- `08-semantic-quality-gate.md` 기준으로 root compile readiness 점검
+- `04-semantic-quality-gate.md` 기준으로 root compile readiness 점검
 - semantic 의미가 있는 root/node의 `semantic.id`가 문서 내에서 유일한지 확인
 - screen root면 `route` 존재와 `flow` 필요 여부 확인
 - component root면 `component.name` 존재 확인
