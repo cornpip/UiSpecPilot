@@ -1,0 +1,16 @@
+.DS_Store
+*.log
+
+**/node_modules/
+**/build/
+**/dist/
+**/.vscode/
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.svg
+.claude
+
+ui_spec/samples/**/*.json
+.codex

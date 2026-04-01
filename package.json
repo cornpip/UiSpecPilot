@@ -1,0 +1,10 @@
+{
+  "name": "uispec-pilot",
+  "scripts": {
+    "figma:server": "node figma/bridge_server/spec-bridge-server.mjs --file ui_spec/samples/start.json --base-dir . --spec-root ui_spec/samples --port 4311",
+    "figma:install": "npm --prefix figma/plugin install",
+    "figma:build": "npm --prefix figma/plugin run build",
+    "figma:setup": "npm run figma:install && npm run figma:build",
+    "figma:watch": "npm --prefix figma/plugin run watch"
+  }
+}

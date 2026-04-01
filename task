@@ -1,0 +1,114 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROMPTS_DIR="$ROOT_DIR/prompts"
+
+print_usage() {
+  cat <<'EOF'
+Usage:
+  ./task help
+  ./task create-spec [request...]
+  ./task edit-spec <ui_spec_path> [request...]
+  ./task semantic-review <ui_spec_path>
+  ./task flutter-codegen <flutter_ir_path> <flutter_project_path> [request...]
+
+What it does:
+  Prints a repository-aware prompt you can paste into your Codex or Claude Code session.
+
+Path input rules:
+  - WSL paths such as /mnt/c/... are supported
+  - Windows paths with forward slashes such as C:/... are supported
+  - Windows backslash paths such as C:\... must be quoted in Bash
+
+Examples:
+  ./task create-spec "가계부 앱 온보딩 첫 화면 만들어줘"
+  ./task edit-spec ui_spec/samples/start.json "상단 카드 간격 줄여줘"
+  ./task semantic-review ui_spec/samples/start.json
+  ./task semantic-review 'C:\path\to\uispecpilot\ui_spec\samples\start.json'
+  ./task flutter-codegen compilers/flutter_ir/examples/sample_flutter_ir.json /path/to/flutter_app "Riverpod 기준으로 생성해줘"
+EOF
+}
+
+render_template() {
+  local template_path="$1"
+  local request_text="${2:-}"
+  local target_path="${3:-}"
+  local project_path="${4:-}"
+  local escaped_request_text
+  local escaped_target_path
+  local escaped_project_path
+
+  escaped_request_text="$(printf '%s' "$request_text" | sed -e 's/[&|\\]/\\&/g')"
+  escaped_target_path="$(printf '%s' "$target_path" | sed -e 's/[&|\\]/\\&/g')"
+  escaped_project_path="$(printf '%s' "$project_path" | sed -e 's/[&|\\]/\\&/g')"
+
+  sed \
+    -e "s|{{USER_REQUEST}}|$escaped_request_text|g" \
+    -e "s|{{TARGET_PATH}}|$escaped_target_path|g" \
+    -e "s|{{IR_PATH}}|$escaped_target_path|g" \
+    -e "s|{{PROJECT_PATH}}|$escaped_project_path|g" \
+    "$template_path"
+}
+
+ensure_template() {
+  local template_path="$1"
+  if [[ ! -f "$template_path" ]]; then
+    echo "Template not found: $template_path" >&2
+    exit 1
+  fi
+}
+
+command_name="${1:-help}"
+if [[ $# -gt 0 ]]; then
+  shift
+fi
+
+case "$command_name" in
+  help|-h|--help)
+    print_usage
+    ;;
+  create-spec)
+    template="$PROMPTS_DIR/create-spec.md"
+    ensure_template "$template"
+    request_text="${*:-<replace this with the requested ui_spec to create>}"
+    render_template "$template" "$request_text"
+    ;;
+  edit-spec)
+    template="$PROMPTS_DIR/edit-spec.md"
+    ensure_template "$template"
+    target_path="${1:-<replace this with the target ui_spec file path>}"
+    if [[ $# -gt 0 ]]; then
+      shift
+    fi
+    request_text="${*:-<replace this with the requested changes>}"
+    render_template "$template" "$request_text" "$target_path"
+    ;;
+  semantic-review)
+    template="$PROMPTS_DIR/semantic-review.md"
+    ensure_template "$template"
+    target_path="${1:-<replace this with the target ui_spec file path>}"
+    render_template "$template" "" "$target_path"
+    ;;
+  flutter-codegen)
+    template="$PROMPTS_DIR/flutter-codegen.md"
+    ensure_template "$template"
+    target_path="${1:-<replace this with the Flutter IR input path>}"
+    if [[ $# -gt 0 ]]; then
+      shift
+    fi
+    project_path="${1:-<replace this with the target Flutter project path>}"
+    if [[ $# -gt 0 ]]; then
+      shift
+    fi
+    request_text="${*:-<replace this with any additional requirements>}"
+    render_template "$template" "$request_text" "$target_path" "$project_path"
+    ;;
+  *)
+    echo "Unknown command: $command_name" >&2
+    echo >&2
+    print_usage >&2
+    exit 1
+    ;;
+esac

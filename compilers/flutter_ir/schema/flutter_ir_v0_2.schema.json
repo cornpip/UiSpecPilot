@@ -1,0 +1,329 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://example.com/flutter_ir_v0_2.schema.json",
+  "title": "flutter_ir_v0.2",
+  "type": "object",
+  "required": ["version", "screens", "components", "tokens", "interactions", "flows", "assets"],
+  "additionalProperties": false,
+  "properties": {
+    "version": {
+      "type": "string",
+      "const": "0.2"
+    },
+    "screens": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/screen"
+      }
+    },
+    "components": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/component"
+      },
+      "default": []
+    },
+    "tokens": {
+      "type": "object",
+      "additionalProperties": true,
+      "default": {}
+    },
+    "interactions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/interactionRef"
+      },
+      "default": []
+    },
+    "flows": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/flowGraph"
+      },
+      "default": []
+    },
+    "assets": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/asset"
+      },
+      "default": []
+    }
+  },
+  "definitions": {
+    "screen": {
+      "type": "object",
+      "required": ["id", "name", "root"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "route": { "type": "string" },
+        "figmaNodeId": { "type": "string" },
+        "root": { "$ref": "#/definitions/node" }
+      }
+    },
+    "component": {
+      "type": "object",
+      "required": ["id", "name", "root"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "figmaNodeId": { "type": "string" },
+        "root": { "$ref": "#/definitions/node" }
+      }
+    },
+    "node": {
+      "type": "object",
+      "required": ["id", "type"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string" },
+        "type": {
+          "type": "string",
+          "enum": [
+            "frame",
+            "text",
+            "image",
+            "icon",
+            "row",
+            "column",
+            "stack",
+            "container",
+            "button",
+            "list",
+            "listItem",
+            "pageView",
+            "textField",
+            "datePicker",
+            "timePicker",
+            "checkbox",
+            "radio",
+            "tab",
+            "segmentedOption",
+            "appBar"
+          ]
+        },
+        "name": { "type": "string" },
+        "props": {
+          "type": "object",
+          "additionalProperties": true,
+          "default": {}
+        },
+        "style": {
+          "type": "object",
+          "additionalProperties": true,
+          "default": {}
+        },
+        "interaction": {
+          "$ref": "#/definitions/interaction"
+        },
+        "state": {
+          "$ref": "#/definitions/nodeState"
+        },
+        "semantic": {
+          "$ref": "#/definitions/nodeSemantic"
+        },
+        "notes": {
+          "$ref": "#/definitions/nodeNotes"
+        },
+        "children": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/node" },
+          "default": []
+        }
+      }
+    },
+    "interaction": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "onTap": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type"],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": ["navigate", "openModal", "openComponent", "toggle", "select", "submit", "none"]
+            },
+            "to": { "type": "string" },
+            "targetId": { "type": "string" }
+          }
+        },
+        "navigation": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "mode": { "type": "string", "enum": ["push", "replace", "reset"] }
+          }
+        },
+        "scroll": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "axis": { "type": "string", "enum": ["vertical", "horizontal"] }
+          }
+        },
+        "gesture": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "type": { "type": "string", "enum": ["swipe", "none"] },
+            "axis": { "type": "string", "enum": ["vertical", "horizontal"] }
+          }
+        },
+        "carousel": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "loop": { "type": "boolean" }
+          }
+        },
+        "prototype": {
+          "type": "object",
+          "required": ["reactions"],
+          "additionalProperties": false,
+          "properties": {
+            "reactions": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/prototypeReaction" },
+              "default": []
+            }
+          }
+        }
+      }
+    },
+    "interactionRef": {
+      "type": "object",
+      "required": ["id", "targetNodeId", "sourceRootId", "sourceRootName", "payload"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string" },
+        "targetNodeId": { "type": "string" },
+        "sourceRootId": { "type": "string" },
+        "sourceRootName": { "type": "string" },
+        "payload": { "$ref": "#/definitions/interaction" }
+      }
+    },
+    "nodeSemantic": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": { "type": "string" },
+        "label": { "type": "string" },
+        "notes": { "type": "string" },
+        "componentRefId": { "type": "string" },
+        "tokenRefs": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "assetRefs": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "nodeState": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "selected": { "type": "boolean" },
+        "checked": { "type": "boolean" },
+        "default": { "type": "boolean" },
+        "active": { "type": "boolean" }
+      }
+    },
+    "nodeNotes": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "memo": { "type": "string" },
+        "sourceMetaNodeId": { "type": "string" },
+        "flowStart": { "type": "boolean" },
+        "flowId": { "type": "string" }
+      }
+    },
+    "flowGraph": {
+      "type": "object",
+      "required": ["id", "name", "edges"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "startScreenId": { "type": "string" },
+        "edges": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/flowEdge" },
+          "default": []
+        }
+      }
+    },
+    "flowEdge": {
+      "type": "object",
+      "required": ["id", "fromScreenId", "toScreenId", "triggerNodeId", "navigation"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string" },
+        "fromScreenId": { "type": "string" },
+        "toScreenId": { "type": "string" },
+        "triggerNodeId": { "type": "string" },
+        "navigation": { "type": "string" }
+      }
+    },
+    "prototypeReaction": {
+      "type": "object",
+      "required": ["trigger", "actions"],
+      "additionalProperties": false,
+      "properties": {
+        "trigger": {
+          "oneOf": [
+            { "type": "null" },
+            { "$ref": "#/definitions/prototypeTrigger" }
+          ]
+        },
+        "actions": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/prototypeAction" },
+          "default": []
+        }
+      }
+    },
+    "prototypeTrigger": {
+      "type": "object",
+      "required": ["type"],
+      "additionalProperties": true,
+      "properties": {
+        "type": { "type": "string" },
+        "timeout": { "type": "number" },
+        "delay": { "type": "number" },
+        "device": { "type": "string" },
+        "keyCodes": {
+          "type": "array",
+          "items": { "type": "number" }
+        },
+        "mediaHitTime": { "type": "number" },
+        "deprecatedVersion": { "type": "boolean" }
+      }
+    },
+    "prototypeAction": {
+      "type": "object",
+      "required": ["type"],
+      "additionalProperties": true,
+      "properties": {
+        "type": { "type": "string" },
+        "navigation": { "type": "string" },
+        "destinationId": { "type": "string" },
+        "destinationNodeId": { "type": "string" },
+        "overlayRelativePosition": { "type": "object" },
+        "transition": { "type": "object" }
+      }
+    },
+    "asset": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  }
+}

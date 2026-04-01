@@ -1,0 +1,33 @@
+{
+  "dependencies": {
+    "@create-figma-plugin/ui": "^4.0.3",
+    "@create-figma-plugin/utilities": "^4.0.3",
+    "preact": ">=10"
+  },
+  "devDependencies": {
+    "@create-figma-plugin/build": "^4.0.3",
+    "@create-figma-plugin/tsconfig": "^4.0.3",
+    "@figma/plugin-typings": "1.109.0",
+    "typescript": ">=5"
+  },
+  "scripts": {
+    "build": "build-figma-plugin --typecheck --minify",
+    "watch": "build-figma-plugin --typecheck --watch",
+    "bridge-server": "node ../bridge_server/spec-bridge-server.mjs --file ui_spec/samples/start.json --base-dir ../.. --spec-root ui_spec/samples --port 4311"
+  },
+  "figma-plugin": {
+    "editorType": [
+      "figma"
+    ],
+    "id": "ui-spec-to-figma",
+    "name": "ui_spec_to_figma",
+    "main": "src/main.ts",
+    "ui": "src/ui.tsx",
+    "networkAccess": {
+      "allowedDomains": [
+        "*"
+      ],
+      "reasoning": "This plugin renders JSON UI specs and may fetch external image/SVG assets from user-provided URLs."
+    }
+  }
+}
