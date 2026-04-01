@@ -10,6 +10,12 @@
 *.jpeg
 *.gif
 *.svg
+!readme_img/
+!readme_img/**/*.png
+!readme_img/**/*.jpg
+!readme_img/**/*.jpeg
+!readme_img/**/*.gif
+!readme_img/**/*.svg
 .claude
 
 ui_spec/samples/**/*.json

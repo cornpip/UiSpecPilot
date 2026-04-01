@@ -42,11 +42,27 @@ source completions/task.bash
 
 ### 2. Review and refine in Figma
 
+First-time setup:
+
 ```bash
-npm run figma:server
+npm run figma:setup
 ```
 
-Start the bridge server, open the Figma plugin, and review or refine the active spec there.
+Run for each working session:
+
+```bash
+npm run server
+```
+
+`npm run figma:setup` installs and builds the Figma plugin once. Run it again only when plugin dependencies change or you need a fresh plugin build.
+
+`npm run server` starts the local bridge server that syncs `ui_spec` files with the Figma plugin.
+
+Then in Figma:
+- Use the Figma Desktop App to import the local plugin from `figma/plugin/manifest.json`. Local manifest import is not supported in the browser version.
+- Re-run `npm run figma:setup` or `npm run figma:build` before re-importing only when you need the latest local plugin build.
+- Open the plugin and Refresh the file list, choose a target JSON file, and run `Set Active File`.
+- Review the rendered result in Figma and iterate on the spec.
 
 ### 3. Run semantic review after visual refinement
 
